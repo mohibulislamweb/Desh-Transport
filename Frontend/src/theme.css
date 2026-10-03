@@ -1,0 +1,461 @@
+/* ============================================
+   🎨 দেশ ট্রান্সপোর্ট — ডিজাইন সিস্টেম
+   সব পেজ একই রং, ফন্ট, কার্ড ও বাটন ব্যবহার করবে
+   ============================================ */
+
+:root {
+  --navy-950: #050d1f;
+  --navy-900: #0a1a3a;
+  --navy-800: #0f2957;
+  --navy-700: #16386f;
+  --teal-500: #14b8a6;
+  --teal-400: #2dd4bf;
+  --teal-300: #5eead4;
+  --amber-400: #fbbf24;
+  --red-500: #ef4444;
+  --green-500: #22c55e;
+  --wa: #25d366;
+
+  --ink: #0b1b36;
+  --ink-soft: #475569;
+  --line: rgba(15, 41, 87, 0.12);
+  --surface: #ffffff;
+  --surface-soft: #f4f7fb;
+
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 2px 10px rgba(10, 26, 58, 0.06);
+  --shadow: 0 14px 40px rgba(10, 26, 58, 0.12);
+  --shadow-lg: 0 30px 80px rgba(10, 26, 58, 0.25);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --font: "Hind Siliguri", "Segoe UI", system-ui, sans-serif;
+  --font-num: "Inter", "Hind Siliguri", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--surface-soft);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--teal-400);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout ---------- */
+.dt-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.dt-section {
+  padding: 96px 0;
+  position: relative;
+}
+
+@media (max-width: 720px) {
+  .dt-section {
+    padding: 64px 0;
+  }
+}
+
+.dt-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--teal-500);
+  background: rgba(20, 184, 166, 0.1);
+  border: 1px solid rgba(20, 184, 166, 0.25);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+.dt-h2 {
+  font-size: clamp(26px, 3.6vw, 40px);
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 14px 0 12px;
+  color: var(--ink);
+}
+
+.dt-lead {
+  color: var(--ink-soft);
+  font-size: 16.5px;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* ---------- Buttons ---------- */
+.dt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 15.5px;
+  padding: 13px 24px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s, filter 0.25s;
+  white-space: nowrap;
+}
+
+.dt-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.dt-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.dt-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.dt-btn-primary {
+  background: linear-gradient(135deg, var(--teal-400), var(--teal-500));
+  color: #042f2e;
+  box-shadow: 0 10px 30px rgba(20, 184, 166, 0.35);
+}
+
+.dt-btn-danger {
+  background: linear-gradient(135deg, #f87171, var(--red-500));
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+}
+
+.dt-btn-wa {
+  background: linear-gradient(135deg, #34e27a, var(--wa));
+  color: #053b1d;
+  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+}
+
+.dt-btn-navy {
+  background: var(--navy-800);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(15, 41, 87, 0.3);
+}
+
+.dt-btn-ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px);
+}
+
+.dt-btn-outline {
+  background: transparent;
+  color: var(--navy-800);
+  border-color: var(--line);
+}
+
+.dt-btn-sm {
+  padding: 9px 16px;
+  font-size: 14px;
+  border-radius: 11px;
+}
+
+.dt-btn-block {
+  width: 100%;
+}
+
+/* ---------- Cards ---------- */
+.dt-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.dt-glass {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- 3D ---------- */
+.dt-3d-scene {
+  perspective: 1200px;
+}
+
+.dt-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.dt-3d-pop {
+  transform: translateZ(40px);
+}
+
+.dt-3d-pop-lg {
+  transform: translateZ(80px);
+}
+
+.dt-tilt-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  transition: opacity 0.3s;
+}
+
+/* ---------- Forms ---------- */
+.dt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dt-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.dt-input {
+  width: 100%;
+  font-family: inherit;
+  font-size: 15.5px;
+  color: var(--ink);
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dt-input:focus {
+  outline: none;
+  border-color: var(--teal-500);
+  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
+}
+
+.dt-dark .dt-input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.dt-dark .dt-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.dt-dark .dt-input option {
+  color: var(--ink);
+}
+
+.dt-dark .dt-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dt-dark .dt-input:focus {
+  border-color: var(--teal-400);
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.18);
+}
+
+/* ---------- Badges ---------- */
+.dt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.dt-badge-teal {
+  background: rgba(20, 184, 166, 0.14);
+  color: #0f766e;
+}
+
+.dt-badge-amber {
+  background: rgba(251, 191, 36, 0.18);
+  color: #92400e;
+}
+
+.dt-badge-red {
+  background: rgba(239, 68, 68, 0.12);
+  color: #b91c1c;
+}
+
+.dt-badge-green {
+  background: rgba(34, 197, 94, 0.14);
+  color: #15803d;
+}
+
+.dt-dark .dt-badge-teal {
+  color: var(--teal-300);
+}
+
+.dt-dark .dt-badge-amber {
+  color: var(--amber-400);
+}
+
+.dt-dark .dt-badge-green {
+  color: #86efac;
+}
+
+.dt-dark .dt-badge-red {
+  color: #fca5a5;
+}
+
+.dt-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-500);
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+  animation: dt-pulse 1.8s infinite;
+}
+
+@keyframes dt-pulse {
+  70% {
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+.dt-num {
+  font-family: var(--font-num);
+  font-feature-settings: "tnum";
+}
+
+/* ---------- Toast ---------- */
+.dt-toast-stack {
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(92vw, 420px);
+  pointer-events: none;
+}
+
+.dt-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.5;
+  background: var(--navy-900);
+  box-shadow: var(--shadow-lg);
+  border-left: 4px solid var(--teal-400);
+  animation: dt-toast-in 0.35s var(--ease);
+}
+
+.dt-toast-error {
+  border-left-color: var(--red-500);
+}
+
+.dt-toast-success {
+  border-left-color: var(--green-500);
+}
+
+@keyframes dt-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+}
+
+/* ---------- Modal ---------- */
+.dt-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(5, 13, 31, 0.72);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.dt-modal {
+  width: min(640px, 100%);
+  max-height: 88vh;
+  overflow: auto;
+  border-radius: var(--radius-lg);
+  background: var(--navy-900);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---------- Skeleton ---------- */
+.dt-skeleton {
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.15), rgba(148, 163, 184, 0.3), rgba(148, 163, 184, 0.15));
+  background-size: 200% 100%;
+  animation: dt-shimmer 1.3s infinite;
+}
+
+@keyframes dt-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.dt-spin {
+  animation: dt-rotate 0.9s linear infinite;
+}
+
+@keyframes dt-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
