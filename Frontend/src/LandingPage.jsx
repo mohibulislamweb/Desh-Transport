@@ -588,17 +588,17 @@ const LandingPage = () => {
             transition={{ duration: 1.2, ease, delay: 0.25 }}
             style={{ transformPerspective: 1200, rotateX: bannerRotate }}
           >
-            <Tilt3D max={10}>
-              <div className="lp-banner-card" style={{ maxWidth: "600px", width: "100%" }}>
-  <img src={bannerImg} alt="দেশ ট্রান্সপোর্ট ব্যানার – ট্রিপ নিয়ে দুশ্চিন্তা? দেশ ট্রান্সপোর্ট থাকলে আর না" />
+           <Tilt3D max={10}>
+              <div className="lp-banner-card" style={{ maxWidth: "600px", width: "200%" }}>
+  <img src={bannerImg} alt="দেশ ট্রান্সপোর্ট ব্যানার – ট্রিপ নিয়ে দুশ্চিন্তা? দেশ ট্রান্সপোর্ট থাকলে আর না" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
 </div>
               <span className="lp-chip lp-float" style={{ top: -35, left: -14, transform: "translateZ(90px)" }}>
   <ShieldCheck size={18} color="var(--teal-300)" /> যাচাইকৃত চালক
 </span>
-              <span className="lp-chip lp-float d2" style={{ bottom: -26, right: -16, transform: "translateZ(110px)" }}>
+              <span className="lp-chip lp-float d2" style={{ bottom: 70, right: -130, transform: "translateZ(110px)" }}>
                 <Clock size={18} color="var(--amber-400)" /> ২৪/৭ সাপোর্ট
               </span>
-              <span className="lp-chip lp-float d3" style={{ bottom: -50, left: 30, transform: "translateZ(70px)" }}>
+              <span className="lp-chip lp-float d3" style={{ bottom: -40, left: -5, transform: "translateZ(70px)" }}>
                 <MapPin size={18} color="#fca5a5" /> সারা দেশে সার্ভিস
               </span>
             </Tilt3D>
