@@ -59,7 +59,7 @@ const AdminLogin = () => {
       <span className="dt-eyebrow" style={{ marginBottom: 12 }}>
         <Lock size={14} /> শুধুমাত্র এডমিন
       </span>
-      <h1 style={{ fontSize: 26, margin: "12px 0 6px" }}>🔐 এডমিন লগইন</h1>
+      <h1 style={{ fontSize: 26, margin: "12px 0 6px" }}>এডমিন লগইন</h1>
       <p style={{ margin: "0 0 24px", color: "var(--ink-soft)" }}>আপনার এডমিন মোবাইল নাম্বার ও পাসওয়ার্ড দিন</p>
 
       <form onSubmit={login} style={{ display: "grid", gap: 14 }}>

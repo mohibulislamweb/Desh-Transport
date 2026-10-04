@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 
-// 🎯 মাউস/টাচ অনুযায়ী 3D টিল্ট কার্ড (glare সহ)
+// 🎯 মাউস অনুযায়ী হালকা 3D টিল্ট (বাস্তবসম্মত রাখতে ডিফল্ট মাত্র ৪°, glare বন্ধ)
 // max = সর্বোচ্চ কত ডিগ্রি ঘুরবে
-const Tilt3D = ({ children, max = 12, glare = true, className = "", style, ...rest }) => {
+const Tilt3D = ({ children, max = 4, glare = false, className = "", style, ...rest }) => {
   const ref = useRef(null);
   const reduce = useReducedMotion();
   const px = useMotionValue(0.5);

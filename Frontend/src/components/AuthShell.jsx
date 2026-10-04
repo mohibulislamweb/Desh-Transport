@@ -15,12 +15,12 @@ const AuthShell = ({ image, imageAlt, title, subtitle, points = [], children }) 
         @media (max-width: 900px) { .as-root { grid-template-columns: 1fr; } .as-art { display: none !important; } }
         .as-mlogo { display: none; margin-bottom: 14px; } @media (max-width: 900px) { .as-mlogo { display: block; } }
         .as-art { position: relative; overflow: hidden; color: #fff; padding: 48px; display: flex; flex-direction: column; justify-content: space-between;
-          background: radial-gradient(700px 400px at 20% 10%, rgba(20,184,166,.3), transparent 60%), radial-gradient(600px 400px at 90% 90%, rgba(99,102,241,.3), transparent 60%), var(--navy-950); }
-        .as-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(94,234,212,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(94,234,212,.08) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(circle at 50% 50%, #000, transparent 75%); -webkit-mask-image: radial-gradient(circle at 50% 50%, #000, transparent 75%); }
-        .as-photo { border-radius: 26px; overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.12); }
+          background: #0b1424; }
+        .as-grid { display: none; position: absolute; inset: 0; background-image: linear-gradient(rgba(94,234,212,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(94,234,212,.08) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(circle at 50% 50%, #000, transparent 75%); -webkit-mask-image: radial-gradient(circle at 50% 50%, #000, transparent 75%); }
+        .as-photo { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.12); }
         .as-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
         .as-form-side { display: flex; align-items: center; justify-content: center; padding: 32px 20px; background: var(--surface-soft); }
-        .as-card { width: 100%; max-width: 460px; background: #fff; border-radius: 28px; padding: 34px 30px; box-shadow: var(--shadow); border: 1px solid var(--line); }
+        .as-card { width: 100%; max-width: 460px; background: #fff; border-radius: var(--radius-lg); padding: 32px 28px; box-shadow: var(--shadow); border: 1px solid var(--line); }
         @media (max-width: 480px) { .as-card { padding: 26px 20px; border-radius: 22px; } }
       `}</style>
 

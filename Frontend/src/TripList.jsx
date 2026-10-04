@@ -1,4 +1,3 @@
-import { formatToBDTime } from './utils/formatDate';
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
@@ -52,19 +51,24 @@ const TripList = () => {
   const takeTrip = async (tripId) => {
     // LOGIN CHECK FIRST
     if (!getDriverToken() || !getDriver()) {
-      notify("🚚 এই ট্রিপটি নিতে হলে প্রথমে ফোন নাম্বার ও পাসওয়ার্ড দিয়ে ড্রাইভার লগইন করুন", "info");
+      notify("এই ট্রিপটি নিতে হলে প্রথমে ফোন নাম্বার ও পাসওয়ার্ড দিয়ে ড্রাইভার লগইন করুন", "info");
       navigate("/login");
       return;
     }
 
     setApplyingId(tripId);
     try {
+      // 📍 সঠিক লোকেশন বাধ্যতামূলক — এডমিন দেখবে ড্রাইভার কোথায় আছে
       const location = await getLocation();
+      if (location.error) {
+        notify(location.error, "error");
+        return;
+      }
       await driverApi.post(`${API}/apply-trip`, {
         tripId,
-        currentLocation: location || undefined
+        currentLocation: location
       });
-      notify("✅ আপনার অনুরোধ এডমিন প্যানেলে পাঠানো হয়েছে", "success");
+      notify("আপনার অনুরোধ লোকেশনসহ এডমিনের কাছে পাঠানো হয়েছে", "success");
       setAppliedIds((s) => new Set(s).add(String(tripId)));
     } catch (error) {
       notify(errorMessage(error), "error");
@@ -84,7 +88,7 @@ const TripList = () => {
   }, [trips, search, body]);
 
   return (
-    <div className="dt-dark" style={{ minHeight: "100svh", background: "radial-gradient(900px 500px at 90% 0%, rgba(20,184,166,.18), transparent 60%), linear-gradient(180deg, var(--navy-900), var(--navy-950))", color: "#fff" }}>
+    <div className="dt-dark" style={{ minHeight: "100svh", background: "#0b1424", color: "#fff" }}>
       <AppHeader
         right={
           loggedIn ? (
@@ -104,7 +108,7 @@ const TripList = () => {
           <span className="dt-eyebrow" style={{ color: "var(--teal-300)", background: "rgba(94,234,212,.08)", borderColor: "rgba(94,234,212,.3)" }}>
             <span className="dt-live-dot" /> লাইভ
           </span>
-          <h1 style={{ fontSize: "clamp(26px, 4vw, 38px)", margin: "12px 0 6px" }}>🚚 লাইভ ট্রিপ তালিকা</h1>
+          <h1 style={{ fontSize: "clamp(26px, 4vw, 38px)", margin: "12px 0 6px" }}>লাইভ ট্রিপ তালিকা</h1>
           <p style={{ margin: 0, color: "rgba(255,255,255,.7)" }}>
             {loading ? "ট্রিপ লোড হচ্ছে…" : `এই মুহূর্তে ${bn(trips.length)}টি ট্রিপ চালকের অপেক্ষায়`}
           </p>

@@ -22,12 +22,24 @@
   --surface: #ffffff;
   --surface-soft: #f4f7fb;
 
-  --radius-sm: 10px;
-  --radius: 16px;
-  --radius-lg: 24px;
-  --shadow-sm: 0 2px 10px rgba(10, 26, 58, 0.06);
-  --shadow: 0 14px 40px rgba(10, 26, 58, 0.12);
-  --shadow-lg: 0 30px 80px rgba(10, 26, 58, 0.25);
+  /* 📐 মাত্র ৩টা কোণের মাপ — সব জায়গায় একই */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(10, 26, 58, 0.06), 0 1px 3px rgba(10, 26, 58, 0.06);
+  --shadow: 0 4px 16px rgba(10, 26, 58, 0.08);
+  --shadow-lg: 0 18px 48px rgba(10, 26, 58, 0.18);
+
+  /* 🔤 নির্দিষ্ট ফন্ট সাইজ স্কেল */
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --fs-xl: 28px;
+  --fs-2xl: 40px;
+
+  --brand: #0f766e;
+  --brand-hover: #115e59;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   --font: "Hind Siliguri", "Segoe UI", system-ui, sans-serif;
@@ -83,105 +95,118 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 700;
-  font-size: 13px;
+  font-weight: 600;
+  font-size: var(--fs-sm);
   letter-spacing: 0.02em;
-  color: var(--teal-500);
-  background: rgba(20, 184, 166, 0.1);
-  border: 1px solid rgba(20, 184, 166, 0.25);
-  padding: 6px 14px;
-  border-radius: 999px;
+  color: var(--brand);
 }
 
 .dt-h2 {
-  font-size: clamp(26px, 3.6vw, 40px);
+  font-size: clamp(26px, 3.2vw, var(--fs-2xl));
   line-height: 1.25;
   font-weight: 700;
-  margin: 14px 0 12px;
+  margin: 10px 0 12px;
   color: var(--ink);
 }
 
 .dt-lead {
   color: var(--ink-soft);
-  font-size: 16.5px;
+  font-size: var(--fs-md);
   line-height: 1.8;
   margin: 0;
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons ----------
+   মাত্র ৩ ধরন: primary (সলিড), secondary (আউটলাইন), ghost (স্বচ্ছ)
+   + দুটো যোগাযোগের রং: wa (WhatsApp), navy */
 .dt-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   font-family: inherit;
-  font-weight: 700;
-  font-size: 15.5px;
-  padding: 13px 24px;
-  border-radius: 14px;
+  font-weight: 600;
+  font-size: var(--fs-md);
+  line-height: 1.2;
+  padding: 12px 22px;
+  border-radius: var(--radius);
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s, filter 0.25s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
   white-space: nowrap;
 }
 
-.dt-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.06);
-}
-
 .dt-btn:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(1px);
 }
 
 .dt-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
 .dt-btn-primary {
-  background: linear-gradient(135deg, var(--teal-400), var(--teal-500));
-  color: #042f2e;
-  box-shadow: 0 10px 30px rgba(20, 184, 166, 0.35);
-}
-
-.dt-btn-danger {
-  background: linear-gradient(135deg, #f87171, var(--red-500));
+  background: var(--brand);
   color: #fff;
-  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
 }
 
-.dt-btn-wa {
-  background: linear-gradient(135deg, #34e27a, var(--wa));
-  color: #053b1d;
-  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+.dt-btn-primary:hover {
+  background: var(--brand-hover);
 }
 
 .dt-btn-navy {
   background: var(--navy-800);
   color: #fff;
-  box-shadow: 0 10px 30px rgba(15, 41, 87, 0.3);
 }
 
-.dt-btn-ghost {
-  background: rgba(255, 255, 255, 0.08);
+.dt-btn-navy:hover {
+  background: var(--navy-900);
+}
+
+.dt-btn-wa {
+  background: #1fa855;
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(10px);
+}
+
+.dt-btn-wa:hover {
+  background: #198f48;
+}
+
+/* লাল শুধু মুছে ফেলা/বাতিলের মতো কাজে */
+.dt-btn-danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+.dt-btn-danger:hover {
+  background: #b91c1c;
 }
 
 .dt-btn-outline {
-  background: transparent;
+  background: #fff;
   color: var(--navy-800);
-  border-color: var(--line);
+  border-color: rgba(15, 41, 87, 0.22);
+}
+
+.dt-btn-outline:hover {
+  border-color: var(--navy-800);
+}
+
+.dt-btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.dt-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .dt-btn-sm {
-  padding: 9px 16px;
-  font-size: 14px;
-  border-radius: 11px;
+  padding: 8px 14px;
+  font-size: var(--fs-sm);
 }
 
 .dt-btn-block {
@@ -197,10 +222,8 @@ a {
 }
 
 .dt-glass {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
 }
 
@@ -247,11 +270,11 @@ a {
 .dt-input {
   width: 100%;
   font-family: inherit;
-  font-size: 15.5px;
+  font-size: var(--fs-md);
   color: var(--ink);
   background: #fff;
-  border: 1.5px solid var(--line);
-  border-radius: 12px;
+  border: 1px solid rgba(15, 41, 87, 0.2);
+  border-radius: var(--radius);
   padding: 12px 14px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -290,10 +313,10 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12.5px;
-  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
 }
 
 .dt-badge-teal {
@@ -375,10 +398,10 @@ a {
   align-items: flex-start;
   gap: 10px;
   padding: 14px 16px;
-  border-radius: 14px;
+  border-radius: var(--radius);
   color: #fff;
   font-weight: 600;
-  font-size: 15px;
+  font-size: var(--fs-sm);
   line-height: 1.5;
   background: var(--navy-900);
   box-shadow: var(--shadow-lg);
@@ -427,7 +450,7 @@ a {
 
 /* ---------- Skeleton ---------- */
 .dt-skeleton {
-  border-radius: 14px;
+  border-radius: var(--radius);
   background: linear-gradient(90deg, rgba(148, 163, 184, 0.15), rgba(148, 163, 184, 0.3), rgba(148, 163, 184, 0.15));
   background-size: 200% 100%;
   animation: dt-shimmer 1.3s infinite;

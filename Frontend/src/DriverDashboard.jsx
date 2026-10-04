@@ -10,11 +10,19 @@ import Tilt3D from "./components/Tilt3D";
 import { notify, errorMessage } from "./components/Toast";
 import { bn } from "./components/Counter";
 import { getLocation } from "./utils/geo";
+import LocationInfo from "./components/LocationInfo";
 
 const STATUS = {
   pending: { label: "অপেক্ষমাণ", cls: "dt-badge-amber", icon: Clock },
   accepted: { label: "কনফার্ম হয়েছে", cls: "dt-badge-green", icon: CheckCircle2 },
-  rejected: { label: "অন্য চালক পেয়েছে", cls: "dt-badge-red", icon: XCircle }
+  rejected: { label: "নির্বাচিত হয়নি", cls: "dt-badge-red", icon: XCircle }
+};
+
+// হিস্ট্রির ট্রিপের অবস্থা
+const HSTATUS = {
+  running: { label: "চলমান", cls: "dt-badge-amber" },
+  completed: { label: "সম্পন্ন", cls: "dt-badge-green" },
+  cancelled: { label: "বাতিল", cls: "dt-badge-red" }
 };
 
 const DriverDashboard = () => {
@@ -64,12 +72,17 @@ const DriverDashboard = () => {
   const applyTrip = async (tripId) => {
     setApplyingId(tripId);
     try {
+      // 📍 সঠিক লোকেশন বাধ্যতামূলক
       const location = await getLocation();
+      if (location.error) {
+        notify(location.error, "error");
+        return;
+      }
       await driverApi.post("/trips/apply-trip", {
         tripId,
-        currentLocation: location || undefined
+        currentLocation: location
       });
-      notify("আপনার অনুরোধ এডমিনের কাছে পাঠানো হয়েছে", "success");
+      notify("আপনার অনুরোধ লোকেশনসহ এডমিনের কাছে পাঠানো হয়েছে", "success");
       loadData();
     } catch (err) {
       notify(errorMessage(err), "error");
@@ -80,15 +93,17 @@ const DriverDashboard = () => {
 
   const updateLocation = async () => {
     setLocating(true);
-    const location = await getLocation(12000);
-    if (!location) {
+    const location = await getLocation();
+    if (location.error) {
       setLocating(false);
-      notify("লোকেশন পাওয়া যায়নি — ফোনের লোকেশন/GPS চালু করে অনুমতি দিন", "error");
+      notify(location.error, "error");
       return;
     }
     try {
-      await driverApi.post("/drivers/location", location);
-      notify("📍 আপনার লোকেশন আপডেট হয়েছে", "success");
+      const res = await driverApi.post("/drivers/location", location);
+      const place = res.data?.location?.placeName;
+      notify(place ? `লোকেশন আপডেট হয়েছে: ${place}` : "আপনার লোকেশন আপডেট হয়েছে", "success");
+      if (res.data?.location) setDriver((d) => ({ ...d, currentLocation: res.data.location }));
     } catch (err) {
       notify(errorMessage(err), "error");
     } finally {
@@ -101,23 +116,26 @@ const DriverDashboard = () => {
     navigate("/", { replace: true });
   };
 
-  const earnings = myTrips.reduce((sum, t) => sum + (Number(t.tripDetails?.fixedPrice) || 0), 0);
+  // শুধু সম্পন্ন ট্রিপের ভাড়া গোনা হবে (বাতিল বা চলমান নয়)
+  const doneTrips = myTrips.filter((t) => (t.status || "completed") === "completed");
+  const runningTrips = myTrips.filter((t) => t.status === "running");
+  const earnings = doneTrips.reduce((sum, t) => sum + (Number(t.tripDetails?.fixedPrice) || 0), 0);
 
   const tabs = [
     { id: "active", label: "নতুন ট্রিপ", icon: Truck, count: trips.length },
     { id: "applied", label: "আমার আবেদন", icon: ClipboardList, count: applications.length },
-    { id: "history", label: "সম্পন্ন ট্রিপ", icon: History, count: myTrips.length }
+    { id: "history", label: "আমার ট্রিপ", icon: History, count: myTrips.length }
   ];
 
   return (
-    <div className="dt-dark" style={{ minHeight: "100svh", color: "#fff", background: "radial-gradient(900px 500px at 10% 0%, rgba(20,184,166,.18), transparent 60%), radial-gradient(700px 400px at 100% 30%, rgba(99,102,241,.16), transparent 60%), linear-gradient(180deg, var(--navy-900), var(--navy-950))" }}>
+    <div className="dt-dark" style={{ minHeight: "100svh", color: "#fff", background: "#0b1424" }}>
       <AppHeader
         right={
           <>
             <button className="dt-btn dt-btn-sm dt-btn-ghost" onClick={loadData} disabled={loading} aria-label="রিফ্রেশ">
               <RefreshCw size={16} className={loading ? "dt-spin" : undefined} />
             </button>
-            <button className="dt-btn dt-btn-sm dt-btn-danger" onClick={logout}>
+            <button className="dt-btn dt-btn-sm dt-btn-ghost" onClick={logout}>
               <LogOut size={16} /> লগআউট
             </button>
           </>
@@ -137,7 +155,7 @@ const DriverDashboard = () => {
               style={{
                 borderRadius: 26,
                 padding: "26px 26px",
-                background: "linear-gradient(135deg, rgba(20,184,166,.22), rgba(99,102,241,.18))",
+                background: "rgba(255,255,255,.04)",
                 border: "1px solid rgba(255,255,255,.14)",
                 display: "grid",
                 gridTemplateColumns: "minmax(0,1.3fr) minmax(0,1fr)",
@@ -148,11 +166,11 @@ const DriverDashboard = () => {
             >
               <style>{`@media (max-width: 760px){ .dd-profile{ grid-template-columns: 1fr !important; } }`}</style>
               <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-                <span style={{ width: 64, height: 64, borderRadius: 20, display: "grid", placeItems: "center", background: "linear-gradient(135deg, var(--teal-400), var(--teal-500))", color: "#042f2e", fontSize: 26, fontWeight: 700, transform: "translateZ(40px)", flexShrink: 0 }}>
+                <span style={{ width: 64, height: 64, borderRadius: 20, display: "grid", placeItems: "center", background: "var(--brand)", color: "#fff", fontSize: 26, fontWeight: 700, transform: "translateZ(40px)", flexShrink: 0 }}>
                   {(driver?.driverName || "D").trim().charAt(0)}
                 </span>
                 <div style={{ minWidth: 0 }}>
-                  <p style={{ margin: 0, color: "rgba(255,255,255,.7)", fontSize: 14 }}>স্বাগতম 👋</p>
+                  <p style={{ margin: 0, color: "rgba(255,255,255,.7)", fontSize: 14 }}>স্বাগতম</p>
                   <h1 style={{ margin: "2px 0 8px", fontSize: 26 }}>{driver?.driverName || "ড্রাইভার"}</h1>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                     <span className="dt-badge dt-badge-teal"><Truck size={14} /> {driver?.truckType || "-"}</span>
@@ -165,12 +183,15 @@ const DriverDashboard = () => {
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div className="dt-glass" style={{ padding: 16, borderRadius: 18 }}>
-                  <small style={{ color: "rgba(255,255,255,.65)" }}>সম্পন্ন ট্রিপ</small>
-                  <div className="dt-num" style={{ fontSize: 26, fontWeight: 700 }}>{bn(myTrips.length)}</div>
+                  <small style={{ color: "rgba(255,255,255,.65)" }}>সম্পন্ন ট্রিপ{runningTrips.length ? ` · চলমান ${bn(runningTrips.length)}` : ""}</small>
+                  <div className="dt-num" style={{ fontSize: 26, fontWeight: 700 }}>{bn(doneTrips.length)}</div>
                 </div>
                 <div className="dt-glass" style={{ padding: 16, borderRadius: 18 }}>
                   <small style={{ color: "rgba(255,255,255,.65)" }}>মোট ভাড়া</small>
                   <div className="dt-num" style={{ fontSize: 22, fontWeight: 700, color: "var(--teal-300)" }}>{taka(earnings)}</div>
+                </div>
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <LocationInfo location={driver?.currentLocation} label="আমার সর্বশেষ লোকেশন" />
                 </div>
                 <button className="dt-btn dt-btn-ghost dt-btn-sm" onClick={updateLocation} disabled={locating} style={{ gridColumn: "1 / -1" }}>
                   {locating ? <Loader2 size={16} className="dt-spin" /> : <MapPin size={16} />} আমার লোকেশন আপডেট করুন
@@ -193,8 +214,8 @@ const DriverDashboard = () => {
                 onClick={() => setTab(t.id)}
                 className="dt-btn dt-btn-sm"
                 style={{
-                  background: on ? "linear-gradient(135deg, var(--teal-400), var(--teal-500))" : "rgba(255,255,255,.06)",
-                  color: on ? "#042f2e" : "#fff",
+                  background: on ? "#fff" : "rgba(255,255,255,.06)",
+                  color: on ? "var(--ink)" : "#fff",
                   borderColor: on ? "transparent" : "rgba(255,255,255,.12)"
                 }}
               >
@@ -268,10 +289,14 @@ const DriverDashboard = () => {
                           {h.tripDetails?.from} <ArrowRight size={15} style={{ verticalAlign: -2 }} /> {h.tripDetails?.to}
                         </strong>
                         <div style={{ color: "rgba(255,255,255,.6)", fontSize: 14, marginTop: 4 }}>
-                          📦 {h.tripDetails?.cargoDetails} • 🕒 {h.tripDetails?.pickupTime}
+                          {h.tripDetails?.cargoDetails} · {h.tripDetails?.pickupTime}
                         </div>
+                        {h.status === "cancelled" && h.cancelReason && (
+                          <div style={{ color: "#fca5a5", fontSize: 13, marginTop: 4 }}>বাতিলের কারণ: {h.cancelReason}</div>
+                        )}
                       </div>
-                      <div style={{ textAlign: "right" }}>
+                      <div style={{ textAlign: "right", display: "grid", gap: 4, justifyItems: "end" }}>
+                        <span className={`dt-badge ${HSTATUS[h.status || "completed"].cls}`}>{HSTATUS[h.status || "completed"].label}</span>
                         <div className="dt-num" style={{ fontSize: 20, fontWeight: 700, color: "var(--teal-300)" }}>{taka(h.tripDetails?.fixedPrice)}</div>
                         <small style={{ color: "rgba(255,255,255,.55)" }}>{new Date(h.completedAt).toLocaleDateString("bn-BD")}</small>
                       </div>

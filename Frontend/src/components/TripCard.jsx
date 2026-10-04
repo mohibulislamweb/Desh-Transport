@@ -1,4 +1,3 @@
-import { formatToBDTime } from '../utils/formatDate';
 import React from "react";
 import { ArrowRight, CalendarClock, Package, Scale, Truck, Loader2, CheckCircle2 } from "lucide-react";
 import Tilt3D from "./Tilt3D";
@@ -16,7 +15,7 @@ const TripCard = ({ trip, onApply, applying = false, applied = false, actionLabe
           <Truck size={14} /> {bodyLabel(trip.requiredVehicleBody)}
         </span>
         <span className="dt-badge dt-badge-amber">
-          <CalendarClock size={14} /> {formatToBDTime(trip.pickupTime || trip.createdAt)}
+          <CalendarClock size={14} /> {trip.pickupTime}
         </span>
       </div>
 
