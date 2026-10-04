@@ -41,7 +41,7 @@ export const DIVISIONS = [
 export const HUB = { id: "dhaka", name: "ঢাকা (হাব)", trips: "প্রধান হাব", x: 148, y: 168 };
 
 export const CITIES = [
-  { id: "cumilla", name: "কুমিল্লা", trips: "৩৫০+ ট্রিপ", x: 205, y: 200 },
+  { id: "cumilla", name: "কুমিল্লা", trips: "৩৫০+ ট্রিপ", x: 188, y: 228 },
   { id: "chittagong", name: "চট্টগ্রাম", trips: "২১০+ ট্রিপ", x: 228, y: 300 },
   { id: "sylhet", name: "সিলেট", trips: "৯৫+ ট্রিপ", x: 222, y: 128 },
   { id: "khulna", name: "খুলনা", trips: "৬০+ ট্রিপ", x: 75, y: 280 },
@@ -51,7 +51,7 @@ export const CITIES = [
 
 // Updated route bezier control points from Dhaka Hub
 export const ROUTE_CONTROL = {
-  cumilla: { cx: 180, cy: 185 },
+  cumilla: { cx: 168, cy: 198 },
   chittagong: { cx: 245, cy: 220 },
   sylhet: { cx: 230, cy: 135 },
   khulna: { cx: 100, cy: 220 },
