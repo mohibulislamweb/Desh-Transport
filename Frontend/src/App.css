@@ -183,13 +183,14 @@
   }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .lp-chip {
     display: none !important;
   }
 
   .lp-banner-card {
     max-width: 100% !important;
+    width: 100% !important;
     padding: 0 10px !important;
     overflow: visible !important;
   }

@@ -1,3 +1,4 @@
+import "./App.css";
 import React, { useState, useRef, useEffect } from "react";
 import MapWatermark from "./MapWatermark";
 import { useNavigate, Link } from "react-router-dom";
