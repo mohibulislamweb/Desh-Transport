@@ -1,6 +1,6 @@
 # 🚚 দেশ ট্রান্সপোর্ট এজেন্সি — Frontend
 
-লাইভ: https://desh-transport-tau.vercel.app/ ·
+লাইভ: https://desh-transport-tau.vercel.app
 
 React 19 + Vite + framer-motion (3D অ্যানিমেশন) + lucide-react আইকন।
 
