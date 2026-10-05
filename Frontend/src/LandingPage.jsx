@@ -893,7 +893,7 @@ const LandingPage = () => {
                 <MapPin size={16} color="var(--teal-400)" style={{ flexShrink: 0, marginTop: 5 }} />
                 <span>
                    মাদানী এবিনিউ ১০০ ফিট,<br />
-                   মাদানী এবিনিউ ১০০ ফিট,
+                   ঢাকা,বাংলাদেশ।
                 </span>
               </p>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "var(--fs-sm)" }}>
