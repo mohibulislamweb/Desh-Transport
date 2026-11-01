@@ -3,7 +3,7 @@
 const cache = new Map();
 let lastCall = 0;
 
-const UA = 'DeshTransport/1.0 (https://desh-transport-tau.vercel.app)';
+const UA = 'DeshTransport/1.0 (https://desh-transport-bd.vercel.app)';
 
 function shortName(address = {}) {
   const parts = [
