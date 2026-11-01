@@ -2,9 +2,7 @@ import axios from "axios";
 
 // 🌐 ব্যাকএন্ডের ঠিকানা এক জায়গায়
 // Vercel এ VITE_API_URL সেট করলে সেটা ব্যবহার হবে, না হলে Render এর ঠিকানা
-export const API_BASE = (
-  import.meta.env.VITE_API_URL || "https://desh-transport-backend.onrender.com"
-).replace(/\/$/, "");
+export const API_BASE = "http://localhost:4000";
 
 export const API_URL = `${API_BASE}/api`;
 
