@@ -19,6 +19,7 @@ if (!process.env.JWT_SECRET) {
 }
 
 const app = express();
+app.use(cors())
 
 // Render/Vercel প্রক্সির জন্য সেটআপ
 app.set('trust proxy', 1);
