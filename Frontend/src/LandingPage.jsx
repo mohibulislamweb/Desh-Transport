@@ -33,7 +33,7 @@ import Tilt3D from "./components/Tilt3D";
 import { ScrollTilt, ParallaxImage } from "./components/ScrollTilt";
 import { CurtainImage, WordReveal, FlipIn } from "./components/Cinematic";
 import LiveRouteCard from "./components/LiveRouteCard";
-import SmoothScroll from "./components/SmoothScroll";
+// ❌ SmoothScroll রিমুভ করা হয়েছে (ল্যাপটপের মাউস স্ক্রল ল্যাগ দূর করার জন্য)
 import Counter, { bn } from "./components/Counter";
 import Logo from "./components/Logo";
 import { publicApi } from "./config";
@@ -82,7 +82,6 @@ const valueProps = [
   }
 ];
 
-// প্রতিটি কার্ডে একই ধরনের তথ্য: বডি ও কোন মালের জন্য উপযুক্ত
 const vehicles = [
   {
     name: "কভার্ড ভ্যান",
@@ -158,15 +157,10 @@ const navLinks = [
   { href: "#contact", label: "যোগাযোগ" }
 ];
 
-// 🛣️ সার্ভিস এলাকা (চলমান স্ট্রিপে দেখায়)
 const coverage = ["ঢাকা", "চট্টগ্রাম", "সিলেট", "খুলনা", "রাজশাহী", "রংপুর", "বরিশাল", "ময়মনসিংহ", "নরসিংদী", "গাজীপুর", "নারায়ণগঞ্জ", "কুমিল্লা", "বগুড়া", "যশোর"];
 
 const ease = [0.22, 1, 0.36, 1];
 
-// ===============================
-// 🚚 "কীভাবে কাজ করে" — স্ক্রলের সাথে রুট লাইন ভরে ওঠে, ট্রাক এগিয়ে চলে
-// ডেস্কটপে আড়াআড়ি, মোবাইলে খাড়া
-// ===============================
 const StepsTimeline = () => {
   const ref = useRef(null);
   const reduce = useReducedMotion();
@@ -200,9 +194,6 @@ const StepsTimeline = () => {
   );
 };
 
-// ===============================
-// 🎬 সংযত রিভিল অ্যানিমেশন (হালকা 3D কাত থেকে সোজা হয়)
-// ===============================
 const Reveal = ({ children, delay = 0, y = 24, className, style }) => {
   const reduce = useReducedMotion();
   return (
@@ -239,20 +230,16 @@ const LandingPage = () => {
   const [pastHero, setPastHero] = useState(false);
   const [liveTrips, setLiveTrips] = useState(null);
   const videoRef = useRef(null);
-  // 🎥 চলন্ত ট্রাকের ভিডিও — মোবাইলে আলাদা হালকা ভার্সন (২১৭KB), পিসিতে ৫১১KB
-  // শুধু ফোনে "Data Saver" চালু থাকলে ভিডিওর বদলে ছবি দেখায়
   const [useVideo] = useState(() => typeof window !== "undefined" && !(navigator.connection && navigator.connection.saveData));
   const [heroVideo] = useState(() => (typeof window !== "undefined" && window.innerWidth < 720 ? heroVideoMobile : heroVideoDesktop));
   const heroRef = useRef(null);
 
-  // ---------- ভিডিও (reduced motion হলে বন্ধ) ----------
   useEffect(() => {
     if (!videoRef.current) return;
     if (reduceMotion) videoRef.current.pause();
     else videoRef.current.play().catch(() => {});
   }, [reduceMotion]);
 
-  // ---------- স্ক্রলে ন্যাভবার সলিড, হিরো পার হলে ভাসমান কল বাটন ----------
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
@@ -263,7 +250,6 @@ const LandingPage = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // ---------- আসল লাইভ ট্রিপ ডাটা ----------
   useEffect(() => {
     let alive = true;
     publicApi
@@ -275,22 +261,18 @@ const LandingPage = () => {
     };
   }, []);
 
-  // ---------- হিরো: স্ক্রলে হালকা প্যারালাক্স ----------
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroTextY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : 80]);
   const videoScale = useTransform(scrollYProgress, [0, 1], [1.02, reduceMotion ? 1.02 : 1.12]);
 
   return (
     <div className="lp-root">
-      <SmoothScroll />
+      {/* ❌ SmoothScroll ট্যাগটি এখানে রিমুভ করে দেওয়া হয়েছে */}
       <MapWatermark />
-      {/* ম্যাপ ওয়াটারমার্ক হালকা করার জন্য উপরে একটা স্বচ্ছ স্তর */}
       <div aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: -1, background: "rgba(243,246,249,.7)", pointerEvents: "none" }} />
 
       <style>{`
         .lp-root { min-height: 100vh; position: relative; z-index: 0; overflow-x: hidden; font-family: var(--font); }
-
-        /* ---------- NAV ---------- */
         .lp-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; transition: background .3s, box-shadow .3s, padding .3s; padding: 14px 0; }
         .lp-nav.is-solid { background: rgba(255,255,255,.96); box-shadow: 0 1px 0 var(--line); padding: 10px 0; }
         .lp-nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -306,7 +288,6 @@ const LandingPage = () => {
         @media (max-width: 1020px) { .lp-links { display: none; } }
         @media (max-width: 720px) { .lp-actions .lp-hide-sm { display: none; } .lp-burger { display: inline-flex; } }
 
-        /* ---------- HERO (বাস্তব ভিডিও + গাঢ় ওভারলে) ---------- */
         .lp-hero { position: relative; min-height: 92svh; background: #0b1424; color: #fff; overflow: hidden; display: flex; align-items: center; padding: 120px 0 120px; isolation: isolate; }
         .lp-hero-video { position: absolute; inset: 0; z-index: -2; }
         .lp-hero-video video { width: 100%; height: 100%; object-fit: cover; }
@@ -322,7 +303,6 @@ const LandingPage = () => {
         .lp-checks { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px; color: rgba(255,255,255,.85); font-size: var(--fs-sm); }
         .lp-checks span { display: inline-flex; align-items: center; gap: 6px; }
 
-        /* ---------- STATS ---------- */
         .lp-stats { position: relative; z-index: 3; margin-top: -56px; }
         .lp-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); border: 1px solid var(--line); }
         .lp-stat { padding: 26px 24px; text-align: center; }
@@ -331,18 +311,15 @@ const LandingPage = () => {
         .lp-stat span { color: var(--ink-soft); font-size: var(--fs-sm); }
         @media (max-width: 760px) { .lp-stats-grid { grid-template-columns: repeat(2, 1fr); } .lp-stat:nth-child(3) { border-left: none; } .lp-stat:nth-child(n+3) { border-top: 1px solid var(--line); } }
 
-        /* ---------- PROMISE (ব্যানার + কেন আমরা) ---------- */
         .lp-promise { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; }
         @media (max-width: 920px) { .lp-promise { grid-template-columns: 1fr; gap: 32px; } }
-        .lp-banner { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); background: #0b1b36; }
-        .lp-banner { aspect-ratio: 3 / 2; }
+        .lp-banner { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); background: #0b1b36; aspect-ratio: 3 / 2; }
         .lp-value { display: flex; gap: 16px; padding: 18px 0; }
         .lp-value + .lp-value { border-top: 1px solid var(--line); }
         .lp-value-icon { width: 44px; height: 44px; border-radius: var(--radius); display: grid; place-items: center; color: var(--brand); background: rgba(15,118,110,.08); flex-shrink: 0; }
         .lp-value h3 { font-size: var(--fs-lg); margin: 0 0 4px; }
         .lp-value p { margin: 0; color: var(--ink-soft); line-height: 1.7; }
 
-        /* ---------- FLEET ---------- */
         .lp-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
         @media (max-width: 900px) { .lp-grid-3 { grid-template-columns: 1fr; } }
         .lp-fleet { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); height: 100%; display: flex; flex-direction: column; transition: box-shadow .3s; }
@@ -355,12 +332,10 @@ const LandingPage = () => {
         .lp-spec { display: flex; justify-content: space-between; font-size: var(--fs-sm); padding: 10px 0; border-top: 1px solid var(--line); color: var(--ink-soft); }
         .lp-spec strong { color: var(--ink); }
 
-        /* ---------- LIVE ---------- */
         .lp-dark { background: #0b1424; color: #fff; }
         .lp-trip { padding: 22px; border-radius: var(--radius-lg); height: 100%; display: flex; flex-direction: column; gap: 12px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); }
         .lp-trip-route { display: flex; align-items: center; gap: 10px; font-size: var(--fs-lg); font-weight: 700; flex-wrap: wrap; }
 
-        /* ---------- COVERAGE MARQUEE ---------- */
         .lp-marquee { overflow: hidden; border-block: 1px solid var(--line); background: rgba(255,255,255,.75); margin-top: 56px; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
         .lp-marquee-track { display: flex; width: max-content; animation: lp-marquee 40s linear infinite; }
         .lp-marquee-track span { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; font-weight: 600; color: var(--ink-soft); white-space: nowrap; font-size: var(--fs-sm); }
@@ -368,7 +343,6 @@ const LandingPage = () => {
         @keyframes lp-marquee { to { transform: translateX(-50%); } }
         @media (hover: hover) { .lp-marquee:hover .lp-marquee-track { animation-play-state: paused; } }
 
-        /* ---------- HERO extras ---------- */
         .lp-line { display: block; overflow: hidden; padding-bottom: .08em; }
         .lp-line > span { display: block; }
         .lp-scroll-cue { position: absolute; left: 50%; bottom: 84px; transform: translateX(-50%); width: 26px; height: 42px; border: 2px solid rgba(255,255,255,.5); border-radius: 14px; display: flex; justify-content: center; padding-top: 7px; }
@@ -376,7 +350,6 @@ const LandingPage = () => {
         @keyframes lp-cue { 0% { opacity: 0; transform: translateY(0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(12px); } }
         @media (max-width: 720px) { .lp-scroll-cue { display: none; } }
 
-        /* ---------- STEPS (স্ক্রল-চালিত রুট) ---------- */
         .lp-steps { position: relative; }
         .lp-steps-track { position: relative; height: 3px; background: var(--line); border-radius: 2px; margin: 0 0 36px; }
         .lp-steps-fill { position: absolute; inset: 0; background: var(--brand); border-radius: 2px; transform-origin: left; }
@@ -395,13 +368,11 @@ const LandingPage = () => {
         .lp-step h3 { font-size: var(--fs-lg); margin: 14px 0 6px; }
         .lp-step p { margin: 0; color: var(--ink-soft); line-height: 1.7; }
 
-        /* ---------- DRIVER JOIN ---------- */
         .lp-join { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: center; }
         @media (max-width: 900px) { .lp-join { grid-template-columns: 1fr; gap: 32px; } }
         .lp-join-photo { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); aspect-ratio: 4 / 4.2; }
         .lp-join-photo img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ---------- REVIEWS (সাধারণ গ্রিড, মোবাইলে সোয়াইপ) ---------- */
         .lp-reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
         @media (max-width: 900px) { .lp-reviews { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 82%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; } .lp-reviews > * { scroll-snap-align: start; } }
         .lp-review { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); height: 100%; display: flex; flex-direction: column; }
@@ -410,11 +381,9 @@ const LandingPage = () => {
         .lp-review-body { padding: 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
         .lp-review-body blockquote { margin: 0; color: var(--ink); line-height: 1.7; flex: 1; }
 
-        /* ---------- CTA ---------- */
         .lp-cta { border-radius: var(--radius-lg); padding: 48px; color: #fff; background: var(--navy-800); display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
         @media (max-width: 720px) { .lp-cta { padding: 32px 22px; } }
 
-        /* ---------- FOOTER ---------- */
         .lp-footer { background: #0b1424; color: rgba(255,255,255,.72); padding: 64px 0 24px; margin-top: 96px; }
         .lp-foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1.1fr 1.1fr; gap: 36px; }
         @media (max-width: 960px) { .lp-foot-grid { grid-template-columns: 1fr 1fr; } }
@@ -428,30 +397,13 @@ const LandingPage = () => {
         .lp-foot-bottom { margin-top: 44px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.08); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: var(--fs-xs); color: rgba(255,255,255,.5); }
         .lp-foot-bottom a { color: rgba(255,255,255,.6); text-decoration: none; }
         .lp-foot-bottom a:hover { color: #fff; text-decoration: underline; }
-        .lp-site-info { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
-        /* ---------- মোবাইলের নিচের অ্যাকশন বার (হিরো পার হলে) ---------- */
         .lp-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 90; display: none; gap: 10px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.97); border-top: 1px solid var(--line); box-shadow: 0 -8px 24px rgba(10,26,58,.08); }
         .lp-bar a { flex: 1; min-height: 48px; }
         @media (max-width: 720px) { .lp-bar { display: flex; } .lp-footer { padding-bottom: 96px; } }
-
-        /* ---------- মোবাইল টিউনিং ---------- */
-        @media (max-width: 560px) {
-          .dt-section { padding: 56px 0; }
-          .lp-hero { min-height: 88svh; padding: 104px 0 96px; }
-          .lp-hero .lp-cta-row .dt-btn { flex: 1 1 100%; min-height: 50px; }
-          .lp-checks { gap: 10px 16px; margin-top: 22px; }
-          .lp-stats { margin-top: -40px; }
-          .lp-stat { padding: 18px 12px; }
-          .lp-cta .lp-cta-row, .lp-join .lp-cta-row { width: 100%; }
-          .lp-cta .lp-cta-row .dt-btn, .lp-join .lp-cta-row .dt-btn { flex: 1 1 100%; min-height: 48px; }
-          .lp-fleet-body .dt-btn { min-height: 44px; }
-          .lp-marquee { margin-top: 36px; }
-        }
-        @media (max-width: 380px) { .lp-nav small { display: none; } .lp-h1 { font-size: 26px; } }
       `}</style>
 
-      {/* ================= NAVBAR ================= */}
+      {/* NAVBAR */}
       <nav className={`lp-nav ${scrolled || mobileMenuOpen ? "is-solid" : ""}`} aria-label="প্রধান মেনু">
         <div className="dt-container lp-nav-inner">
           <a href="#top" style={{ textDecoration: "none" }} aria-label="দেশ ট্রান্সপোর্ট হোম">
@@ -473,7 +425,6 @@ const LandingPage = () => {
             <button className="dt-btn dt-btn-sm dt-btn-primary lp-hide-sm" onClick={() => navigate("/login")}>
               <Users size={16} /> ড্রাইভার লগইন
             </button>
-            {/* 🔐 এডমিন প্যানেলে যাওয়ার বাটন (হালকা স্টাইলে, যাতে গ্রাহকের নজর না কাড়ে) */}
             <button
               className={`dt-btn dt-btn-sm lp-hide-sm ${scrolled ? "dt-btn-outline" : "dt-btn-ghost"}`}
               onClick={() => navigate("/admin-login")}
@@ -511,7 +462,7 @@ const LandingPage = () => {
         )}
       </AnimatePresence>
 
-      {/* ================= HERO ================= */}
+      {/* HERO */}
       <header id="top" className="lp-hero" ref={heroRef}>
         <motion.div className="lp-hero-video" style={{ scale: videoScale }}>
           <motion.div
@@ -541,7 +492,6 @@ const LandingPage = () => {
               মেসার্স দেশ ট্রান্সপোর্ট এজেন্সি · ২০১৮ থেকে
             </motion.span>
 
-            {/* শিরোনামের প্রতিটি লাইন নিচ থেকে উঠে আসে (মাস্ক রিভিল) */}
             <h1 className="lp-h1">
               {["দেশ ট্রান্সপোর্ট থাকলে পরিবহন নিয়ে", "আর কোনো দুশ্চিন্তা নেই!"].map((line, i) => (
                 <span key={line} className="lp-line">
@@ -565,7 +515,6 @@ const LandingPage = () => {
               সারাদেশে কভার্ড ভ্যান, খোলা ট্রাক ও ট্রেইলার সার্ভিস — নির্ধারিত ভাড়া, যাচাইকৃত চালক ও রিয়েল-টাইম ট্রিপ আপডেট সহ।
             </motion.p>
 
-            {/* শুধু দুটো বাটন: মূল কাজ (কল) + বিকল্প (WhatsApp) */}
             <motion.div
               className="lp-cta-row"
               initial={reduceMotion ? false : { opacity: 0, y: 18 }}
@@ -587,7 +536,6 @@ const LandingPage = () => {
             </motion.div>
           </motion.div>
 
-          {/* 🛰️ লাইভ রুট প্যানেল (3D) */}
           <LiveRouteCard trip={liveTrips && liveTrips[0]} />
         </div>
         {!reduceMotion && (
@@ -597,7 +545,7 @@ const LandingPage = () => {
         )}
       </header>
 
-      {/* ================= TRUST STATS ================= */}
+      {/* STATS */}
       <section className="lp-stats">
         <div className="dt-container">
           <Reveal y={50}>
@@ -613,7 +561,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ================= COVERAGE MARQUEE ================= */}
+      {/* COVERAGE MARQUEE */}
       <div className="lp-marquee" aria-label="সার্ভিস এলাকা">
         <div className="lp-marquee-track">
           {[...coverage, ...coverage].map((c, i) => (
@@ -624,12 +572,12 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* ================= PROMISE: ব্যানার + কেন আমরা ================= */}
+      {/* PROMISE */}
       <section id="services" className="dt-section">
         <div className="dt-container lp-promise">
           <ScrollTilt>
             <Tilt3D max={3}>
-              <CurtainImage className="lp-banner" image={IMG.banner} alt="দেশ ট্রান্সপোর্ট ব্যানার — ট্রিপ নিয়ে দুশ্চিন্তা? দেশ ট্রান্সপোর্ট থাকলে আর না" />
+              <CurtainImage className="lp-banner" image={IMG.banner} alt="দেশ ট্রান্সপোর্ট ব্যানার" />
             </Tilt3D>
           </ScrollTilt>
           <div>
@@ -659,7 +607,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ================= FLEET ================= */}
+      {/* FLEET */}
       <section id="fleet" className="dt-section" style={{ paddingTop: 0 }}>
         <div className="dt-container">
           <SectionHead eyebrow="গাড়ির বহর" title="আমাদের যানবাহনের ধরণ সমূহ" lead="আপনার মালামালের সুরক্ষায় আমাদের সুসজ্জিত ও আধুনিক যানবাহনের বহর।" />
@@ -688,7 +636,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ================= LIVE TRIPS (আসল ডাটা) ================= */}
+      {/* LIVE TRIPS */}
       <section id="live" className="dt-section lp-dark dt-dark">
         <div className="dt-container">
           <SectionHead
@@ -754,7 +702,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ================= HOW IT WORKS ================= */}
+      {/* HOW IT WORKS */}
       <section id="how" className="dt-section">
         <div className="dt-container">
           <SectionHead eyebrow="প্রক্রিয়া" title="কীভাবে কাজ করে" lead="মাত্র তিন ধাপে আপনার মালামাল পৌঁছে যাবে গন্তব্যে।" />
@@ -762,7 +710,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ================= DRIVER JOIN ================= */}
+      {/* DRIVER JOIN */}
       <section className="dt-section" style={{ paddingTop: 0 }}>
         <div className="dt-container lp-join">
           <ScrollTilt>
@@ -804,7 +752,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ================= REVIEWS ================= */}
+      {/* REVIEWS */}
       <section id="reviews" className="dt-section" style={{ paddingTop: 0 }}>
         <div className="dt-container">
           <SectionHead eyebrow="মতামত" title="আমাদের চালকদের মতামত" lead="অভিজ্ঞ চালকদের বাস্তব অভিজ্ঞতা ও দেশ ট্রান্সপোর্টের প্রতি তাদের আস্থা।" />
@@ -832,7 +780,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
+      {/* CTA */}
       <section id="contact" className="dt-container">
         <Reveal>
           <div className="lp-cta">
@@ -854,11 +802,10 @@ const LandingPage = () => {
         </Reveal>
       </section>
 
-      {/* ================= FOOTER ================= */}
+      {/* FOOTER */}
       <footer className="lp-footer">
         <div className="dt-container">
           <div className="lp-foot-grid">
-            {/* Col 1: Brand Info */}
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <img src={logoImg} alt="দেশ ট্রান্সপোর্ট" style={{ width: 48, height: 48, borderRadius: "50%", objectFit: "cover" }} />
@@ -875,7 +822,6 @@ const LandingPage = () => {
               </span>
             </div>
 
-            {/* Col 2: Services */}
             <div>
               <h4>প্রধান সেবাসমূহ</h4>
               <ul>
@@ -886,14 +832,13 @@ const LandingPage = () => {
               </ul>
             </div>
 
-            {/* Col 3: Head Office */}
             <div>
               <h4>প্রধান কার্যালয়</h4>
               <p style={{ display: "flex", gap: 8, lineHeight: 1.9, margin: "0 0 12px", fontSize: "var(--fs-sm)" }}>
                 <MapPin size={16} color="var(--teal-400)" style={{ flexShrink: 0, marginTop: 5 }} />
                 <span>
                    মাদানী এবিনিউ ১০০ ফিট,<br />
-                   ঢাকা,বাংলাদেশ।
+                   ঢাকা, বাংলাদেশ।
                 </span>
               </p>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "var(--fs-sm)" }}>
@@ -901,7 +846,6 @@ const LandingPage = () => {
               </span>
             </div>
 
-            {/* Col 4: Hotline Cards */}
             <div>
               <h4>জরুরি হটলাইন</h4>
               <div style={{ display: "grid", gap: 10 }}>
@@ -917,7 +861,6 @@ const LandingPage = () => {
             </div>
           </div>
 
-          {/* Bottom Copyright & Site Info */}
            <div className="lp-foot-bottom">
             <p style={{ margin: 0 }}>© {bn(new Date().getFullYear())} মেসার্স দেশ ট্রান্সপোর্ট এজেন্সি. সর্বস্বত্ব সংরক্ষিত।</p>
             <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
@@ -925,7 +868,6 @@ const LandingPage = () => {
                 Developed by <span style={{ color: "var(--teal-400)", fontWeight: 700, whiteSpace: "nowrap" }}>Engr. Mohibul Islam</span>
               </span>
              <a 
-  className="dt-btn dt-btn-sm" 
   href={developerHref} 
   target="_blank" 
   rel="noreferrer" 
@@ -934,17 +876,19 @@ const LandingPage = () => {
     color: "#ffffff", 
     display: "inline-flex", 
     alignItems: "center", 
-    gap: "6px",
-    padding: "6px 16px",
-    borderRadius: "20px",
+    gap: "4px",
+    padding: "2px 6px",
+    borderRadius: "12px",
+    fontSize: "11px",
     fontWeight: "600",
-    textDecoration: "none"
+    textDecoration: "none",
+    lineHeight: "1.2"
   }}
 >
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99 0-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
   </svg>
-  Contact Developer
+  Contact
 </a>
               <Link to="/admin-login" style={{ color: "rgba(255,255,255,.4)", fontSize: 13 }}>
                 এডমিন
@@ -954,7 +898,6 @@ const LandingPage = () => {
         </div>
       </footer>
 
-      {/* মোবাইলে নিচের কল/WhatsApp বার — হিরো পার হওয়ার পর দেখায়, যাতে হিরোর বাটন ঢেকে না যায় */}
       <AnimatePresence>
         {pastHero && (
           <motion.div className="lp-bar" initial={{ y: 80 }} animate={{ y: 0 }} exit={{ y: 80 }} transition={{ duration: 0.35, ease }}>
